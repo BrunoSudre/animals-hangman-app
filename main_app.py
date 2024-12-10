@@ -323,7 +323,6 @@ def predict_image(image_file):
 
 def main():
     st.title(":green[**ANIMALS HANGMAN**] 🐘 🐶 🐓 🐈")
-    st.write(game_state)
 
     if not game_state.is_game_active:
         text = ("Welcome to **Animals Hangman**, a fun and interactive game where uploaded images of animals are used"
