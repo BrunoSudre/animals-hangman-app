@@ -150,14 +150,13 @@ def has_lost_game():
 
 
 def has_finished_game():
-    return (len(game_state.incorrect_guesses) + 1 >= MAX_LIVES
-            or len(game_state.correct_guesses) + 1 == len(set(game_state.prediction)))
+    return has_won_game() or has_lost_game()
 
 
 def verify_letter_matches(guess):
     guess = guess.lower()
     prediction = game_state.prediction.lower()
-    if guess:
+    if guess and not has_finished_game():
         if guess.strip():
             if guess in prediction:
                 st.toast(f"Correct guess: {guess} ✅")
@@ -167,7 +166,7 @@ def verify_letter_matches(guess):
                     letter_id = f"letter_{i}"
                     st.session_state[letter_id] = guess.upper()
             else:
-                if len(game_state.incorrect_guesses) < len(HANGMAN_STEPS):
+                if len(game_state.incorrect_guesses) < MAX_LIVES:
                     game_state.incorrect_guesses.add(guess)
                     st.toast(f"Incorrect guess: {guess} ❌")
         else:
@@ -178,6 +177,7 @@ def generate_fields():
     left_column, right_column = st.columns(2)
 
     prediction = game_state.prediction
+
     with left_column:
         guess = st.text_input(label="Try a letter", max_chars=1, key=f"guess_input",
                               disabled=has_finished_game())
