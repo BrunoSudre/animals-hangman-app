@@ -36,7 +36,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-ANIMAL_CNN_API_URL = "https://animals-prediction-api.onrender.com"
+ANIMAL_CNN_API_URL = "http://0.0.0.0:8000"
 GET_ANIMAL_PREDICTION_URL = ANIMAL_CNN_API_URL + "/predict"
 POST_TRAIN_REQUEST_URL = ANIMAL_CNN_API_URL + "/train-request"
 GET_TRAIN_REQUESTS_URL = ANIMAL_CNN_API_URL + "/train-requests"
@@ -59,9 +59,10 @@ class GameState:
         self.is_training_requested = False
 
 
-@st.cache_resource
 def create_object() -> GameState:
-    return GameState()
+    if "game_state" not in st.session_state:
+        st.session_state["game_state"] = GameState()
+    return st.session_state["game_state"]
 
 
 game_state = create_object()
@@ -293,7 +294,7 @@ def show_game():
             left_column.write("This was the random selected image:")
 
             bytes_data = game_state.selected_image.getvalue()
-            pil_image = Image.open(io.BytesIO(bytes_data))
+            pil_image = Image.open(io.BytesIO(bytes_data)).resize((512, 512))
             left_column.image(pil_image, caption=game_state.prediction.upper(), use_container_width=True)
 
             right_column.write("This were the prediction probabilities for this image:")
@@ -322,6 +323,7 @@ def predict_image(image_file):
         return response.json()
     except Exception as e:
         st.error(f"Error when trying predict animal... \n {e}")
+        return {}
 
 
 def main():
@@ -337,11 +339,9 @@ def main():
             "This is a little game that based on uploaded images, randomly choose one of them and make a prediction "
             "based on it to generate the game's phrase.")
         # write(stream_data(x=text))
-        # time.sleep(0.3)
         st.write(text)
         st.subheader("Upload the image you want to generate the game")
         uploaded_files = st.file_uploader(" ", type=["JPG", "PNG"], accept_multiple_files=True)
-
         if uploaded_files:
             if not game_state.prediction:
                 with st.spinner("Processing images..."):
@@ -349,8 +349,7 @@ def main():
                     predict_result = predict_image(selected_image)
                     game_state.prediction = predict_result["prediction"]
                     game_state.pred_probabilities = predict_result["probabilities"]
-
-            if st.button("Create game"):
+            if game_state.prediction and st.button("Create game"):
                 with st.spinner("**Creating game...**"):
                     game_state.is_game_active = True
                     time.sleep(0.8)
