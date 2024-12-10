@@ -314,12 +314,16 @@ def show_game():
 
 def predict_image(image_file):
     try:
-        bytes_data = image_file.getvalue()
+        rgb_image = Image.open(io.BytesIO(image_file.getvalue())).resize((64, 64)).convert("RGB")
+        byte_io = io.BytesIO()
+        rgb_image.save(byte_io, format="JPEG")
+        bytes_data = byte_io.getvalue()
         game_state.selected_image = image_file
         files = {
-            "file": (image_file.name, io.BytesIO(bytes_data), image_file.type)
+            "file": (image_file.name, bytes_data, image_file.type)
         }
         response = requests.post(url=GET_ANIMAL_PREDICTION_URL, files=files)
+        st.write(response)
         return response.json()
     except Exception as e:
         st.error(f"Error when trying predict animal... \n {e}")
@@ -339,7 +343,6 @@ def main():
             "This is a little game that based on uploaded images, randomly choose one of them and make a prediction "
             "based on it to generate the game's phrase.")
         # write(stream_data(x=text))
-        st.write(text)
         st.subheader("Upload the image you want to generate the game")
         uploaded_files = st.file_uploader(" ", type=["JPG", "PNG"], accept_multiple_files=True)
         if uploaded_files:
@@ -347,8 +350,9 @@ def main():
                 with st.spinner("Processing images..."):
                     selected_image = random.sample(uploaded_files, k=1)[0]
                     predict_result = predict_image(selected_image)
-                    game_state.prediction = predict_result["prediction"]
-                    game_state.pred_probabilities = predict_result["probabilities"]
+                    if predict_result:
+                        game_state.prediction = predict_result["prediction"]
+                        game_state.pred_probabilities = predict_result["probabilities"]
             if game_state.prediction and st.button("Create game"):
                 with st.spinner("**Creating game...**"):
                     game_state.is_game_active = True

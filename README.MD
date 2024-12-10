@@ -1,4 +1,4 @@
-# Animals Hangman 🐘
+# Animals Hangman 🐘 🐶 🐓 🐈
 
 This is a little game that based on uploaded images,
 randomly choose one of them and make a prediction
