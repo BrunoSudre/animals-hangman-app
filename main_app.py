@@ -323,7 +323,6 @@ def predict_image(image_file):
             "file": (image_file.name, bytes_data, image_file.type)
         }
         response = requests.post(url=GET_ANIMAL_PREDICTION_URL, files=files)
-        st.write(response)
         return response.json()
     except Exception as e:
         st.error(f"Error when trying predict animal... \n {e}")
