@@ -312,13 +312,16 @@ def show_game():
 
 
 def predict_image(image_file):
-    bytes_data = image_file.getvalue()
-    game_state.selected_image = image_file
-    files = {
-        "file": (image_file.name, io.BytesIO(bytes_data), image_file.type)
-    }
-    response = requests.post(url=GET_ANIMAL_PREDICTION_URL, files=files)
-    return response.json()
+    try:
+        bytes_data = image_file.getvalue()
+        game_state.selected_image = image_file
+        files = {
+            "file": (image_file.name, io.BytesIO(bytes_data), image_file.type)
+        }
+        response = requests.post(url=GET_ANIMAL_PREDICTION_URL, files=files)
+        return response.json()
+    except Exception as e:
+        st.error(f"Error when trying predict animal... \n {e}")
 
 
 def main():
