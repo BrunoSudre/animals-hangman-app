@@ -1,0 +1,9 @@
+[theme]
+primaryColor = "#D29206"
+backgroundColor = "#000"
+secondaryBackgroundColor = "#5A4222"
+textColor = "#fff"
+font = "monospace"
+
+[client]
+showSidebarNavigation = false
