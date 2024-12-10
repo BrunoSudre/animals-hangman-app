@@ -1,6 +1,6 @@
 # Animals Hangman 🐘 🐶 🐓 🐈
 
-Welcome to **Animals Hangman**, a fun and interactive game where uploaded images of animals are used to create a classic
+Welcome to [**Animals Hangman**](https://animals-hangman.streamlit.app/), a fun and interactive game where uploaded images of animals are used to create a classic
 hangman experience!
 
 ## How It Works:
