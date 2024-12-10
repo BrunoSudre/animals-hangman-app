@@ -48,6 +48,12 @@ hangman experience!
     - For more details about the model training, see
       the [model's notebook](https://github.com/BrunoSudre/animals-prediction-cnn/blob/master/animal-cnn-classification.ipynb)
 
+11. **Performance Notice**
+    - Please note that both the **Animals Hangman** app and the **Animals Prediction API** are hosted on free tiers of *
+      *Streamlit Cloud** and **Render**, respectively. Due to resource limitations, this may result in occasional delays
+      in responses, especially during high traffic periods.
+    - We appreciate your understanding and encourage patience while enjoying the app!
+
 Enjoy playing and discovering animals with **Animals Hangman**!
 
 ## Model Status: Strengths and Limitations
