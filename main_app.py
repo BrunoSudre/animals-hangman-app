@@ -289,7 +289,7 @@ def show_game():
             reset_game()
 
     if has_won_game() or has_lost_game():
-        with st.expander("Explanation"):
+        with st.expander("Explanation", expanded=True):
             left_column, right_column = st.columns(2)
             left_column.write("This was the random selected image:")
 
