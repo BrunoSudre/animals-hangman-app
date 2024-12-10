@@ -64,7 +64,7 @@ True Positive predictions.
 
 Below is the confusion matrix generated from the test dataset, illustrating the model's performance across all classes:
 
-![Confusion Matrix](image.png)
+![Confusion Matrix](./assets/animals-cnn-confusion-matrix.png)
 
 ### Limitations:
 
