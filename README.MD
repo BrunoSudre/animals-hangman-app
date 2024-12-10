@@ -44,6 +44,10 @@ hangman experience!
     - If a misclassification is noticed, users can report it directly through the interface. The reported image will be
       stored for future retraining of the model, improving its accuracy over time.
 
+10. **Model Training**
+    - For more details about the model training, see
+      the [model's notebook](https://github.com/BrunoSudre/animals-prediction-cnn/blob/master/animal-cnn-classification.ipynb)
+
 Enjoy playing and discovering animals with **Animals Hangman**!
 
 ## Model Status: Strengths and Limitations
