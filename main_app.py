@@ -14,12 +14,12 @@ from PIL import Image
 import pandas as pd
 
 st.set_page_config(
-    page_title="Bruno Sudré",
+    page_title="Animals Hangman",
     page_icon="🐘",
     layout="centered",
     initial_sidebar_state="expanded",
     menu_items={
-        'About': "Bruno Sudré's Animal Hangman"
+        'About': "Animal Hangman by Bruno Sudré https://brunosudre.streamlit.app/",
     }
 )
 
