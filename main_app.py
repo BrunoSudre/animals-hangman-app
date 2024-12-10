@@ -5,7 +5,6 @@ import uuid
 
 import streamlit as st
 from streamlit_extras.let_it_rain import rain
-from streamlit_extras.streaming_write import write
 import plotly.express as px
 
 import requests
@@ -36,7 +35,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-ANIMAL_CNN_API_URL = "https://animals-prediction-api.onrender.com"
+ANIMAL_CNN_API_URL = "http://localhost:8000"
 GET_ANIMAL_PREDICTION_URL = ANIMAL_CNN_API_URL + "/predict"
 POST_TRAIN_REQUEST_URL = ANIMAL_CNN_API_URL + "/train-request"
 GET_TRAIN_REQUESTS_URL = ANIMAL_CNN_API_URL + "/train-requests"
@@ -132,13 +131,6 @@ def reset_game():
         st.rerun()
 
 
-# if "session_id" not in st.session_state:
-#     st.session_state["session_id"] = str(uuid.uuid4())
-#     st.session_state["is_page_reload"] = False
-# else:
-#     reset_game()
-
-
 def draw_hangman():
     used_lives = len(game_state.incorrect_guesses)
     hangman = HANGMAN_STEPS[used_lives]
@@ -158,7 +150,7 @@ def has_lost_game():
 
 
 def has_finished_game():
-    return (len(game_state.incorrect_guesses) == MAX_LIVES - 1
+    return (len(game_state.incorrect_guesses) + 1 >= MAX_LIVES
             or len(game_state.correct_guesses) + 1 == len(set(game_state.prediction)))
 
 
@@ -330,18 +322,13 @@ def predict_image(image_file):
 
 
 def main():
-    def stream_data(x):
-        for word in x.split(" "):
-            yield word + " "
-            time.sleep(0.15)
-
     st.title(":green[**ANIMALS HANGMAN**] 🐘 🐶 🐓 🐈")
+    st.write(game_state)
 
     if not game_state.is_game_active:
-        text = (
-            "This is a little game that based on uploaded images, randomly choose one of them and make a prediction "
-            "based on it to generate the game's phrase.")
-        # write(stream_data(x=text))
+        text = ("Welcome to **Animals Hangman**, a fun and interactive game where uploaded images of animals are used"
+                " to create a classic hangman experience!")
+        st.write(text)
         st.subheader("Upload the image you want to generate the game")
         uploaded_files = st.file_uploader(" ", type=["JPG", "PNG"], accept_multiple_files=True)
         if uploaded_files:
