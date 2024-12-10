@@ -153,41 +153,44 @@ def has_finished_game():
     return has_won_game() or has_lost_game()
 
 
-def verify_letter_matches(guess):
-    guess = guess.lower()
-    prediction = game_state.prediction.lower()
-    if guess and not has_finished_game():
-        if guess.strip():
-            if guess in prediction:
-                st.toast(f"Correct guess: {guess} ✅")
-                game_state.correct_guesses.add(guess)
-                indexes = find_indexes(prediction, guess)
-                for i in indexes:
-                    letter_id = f"letter_{i}"
-                    st.session_state[letter_id] = guess.upper()
+def verify_letter_matches():
+    if "guess_input" in st.session_state:
+        guess = st.session_state["guess_input"]
+        guess = guess.lower()
+        prediction = game_state.prediction.lower()
+        if guess and not has_finished_game():
+            if guess.strip() and guess.isalpha():
+                if guess in prediction:
+                    if guess in game_state.correct_guesses:
+                        st.toast(f"You've already inserted: **{guess.upper()}** 😄")
+                    else:
+                        st.toast(f"Correct guess: **{guess.upper()}** ✅")
+                    game_state.correct_guesses.add(guess)
+                    indexes = find_indexes(prediction, guess)
+                    for i in indexes:
+                        letter_id = f"letter_{i}"
+                        st.session_state[letter_id] = guess.upper()
+                else:
+                    if len(game_state.incorrect_guesses) < MAX_LIVES:
+                        game_state.incorrect_guesses.add(guess)
+                        st.toast(f"Incorrect guess: **{guess.upper()}** ❌")
             else:
-                if len(game_state.incorrect_guesses) < MAX_LIVES:
-                    game_state.incorrect_guesses.add(guess)
-                    st.toast(f"Incorrect guess: {guess} ❌")
-        else:
-            st.toast("You should enter a letter, remove the space! ⚠️")
+                st.toast("You should enter a letter, remove the space or non-alphabet character! ⚠️")
+
+        st.session_state["guess_input"] = ""
 
 
 def generate_fields():
     left_column, right_column = st.columns(2)
 
-    prediction = game_state.prediction
-
     with left_column:
-        guess = st.text_input(label="Try a letter", max_chars=1, key=f"guess_input",
-                              disabled=has_finished_game())
-
-    verify_letter_matches(guess)
+        st.text_input(label="Try a letter", max_chars=1, key=f"guess_input",
+                      disabled=has_finished_game(), on_change=verify_letter_matches())
 
     with right_column:
         draw_hangman()
 
-    columns = st.columns(len(prediction))
+    columns = st.columns(len(game_state.prediction))
 
     for i, col in enumerate(columns):
         col.text_input(label=f"{i + 1}",
