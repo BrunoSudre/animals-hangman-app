@@ -35,7 +35,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-ANIMAL_CNN_API_URL = "http://localhost:8000"
+ANIMAL_CNN_API_URL = "https://animals-prediction-api.onrender.com"
 GET_ANIMAL_PREDICTION_URL = ANIMAL_CNN_API_URL + "/predict"
 POST_TRAIN_REQUEST_URL = ANIMAL_CNN_API_URL + "/train-request"
 GET_TRAIN_REQUESTS_URL = ANIMAL_CNN_API_URL + "/train-requests"
